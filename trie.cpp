@@ -41,8 +41,30 @@ unordered_map<string, int> Trie::search(vector<string> query) {
                 while (fin >> file) {
                     ++res[file];
                 }
-            } 
+            }
         }
     }
     return res;
+}
+unordered_map<string, int> Trie::info() {
+    h = 0;
+    tn = 0;
+    tc = 0;
+    h = traverse(fs::path(".index/"), 0);
+    unordered_map<string, int> infomap;
+    infomap["h"] = h;
+    infomap["t"] = tn;
+    infomap["c"] = tc;
+    return infomap;
+}
+int Trie::traverse(fs::path curr_path, int curr_height) {
+    int max_h = curr_height;
+    for (const auto& entry : fs::directory_iterator(curr_path)) {     
+        if (fs::is_directory(entry.path())) {
+            ++tn;
+            tc += curr_height + 1;
+            max_h = max(traverse(entry.path(), curr_height + 1), max_h);
+        }
+    }
+    return max_h;
 }

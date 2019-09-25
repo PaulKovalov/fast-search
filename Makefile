@@ -4,7 +4,7 @@ EXEC=main
 FLAGS= -Wall -pedantic
 
 $(EXEC): main.o trie.o document.o string_utility.o app.o config.o reader.o validator.o app.o doc_reader.o
-	g++ main.o trie.o document.o string_utility.o app.o config.o reader.o validator.o doc_reader.o -o $(EXEC) $(LIBS) 
+	g++ main.o trie.o document.o string_utility.o app.o config.o reader.o validator.o doc_reader.o -o $(EXEC) $(LIBS) $(FLAGS)
 
 main.o: main.cpp
 	g++ main.cpp -c $(STD) $(FLAGS)

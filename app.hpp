@@ -36,6 +36,7 @@ class App {
 	void showAddMenu();
 	void showMainMenu(int);
 	void showIndexedFiles();
+	void showIndexInfo();
 	bool deleteIndex();
 public:
 	App();

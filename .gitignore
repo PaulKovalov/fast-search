@@ -1,3 +1,4 @@
 .index
 *.o
 main
+*.txt

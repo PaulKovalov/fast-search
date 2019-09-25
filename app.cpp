@@ -22,10 +22,14 @@ void App::showIndexedFiles() {
         cout << *it << endl;
     }
 }
+void App::showIndexInfo() {
+
+}
+
 void App::showAddMenu() {
     while (true) {
         LS();
-        cout << "\nType q for quit\n";
+        cout << "\nType q to exit this menu\n";
         string input;
         stringstream ss;
         cin >> input;
@@ -39,6 +43,7 @@ void App::showAddMenu() {
             cin >> input;
             if (input == "q")
                 return;
+            ss.clear();
             ss << input;
             ss >> val;
         }
@@ -65,7 +70,8 @@ void App::showMainMenu(int option = 0) {
             cout << "2. Add files to index\n";
             cout << "3. List indexed files\n";
             cout << "4. Delete index\n";
-            cout << "5. Exit\n";
+            cout << "5. See index information\n";
+            cout << "6. Exit\n";
             cin >> input;
             cin.ignore();
             ss << input;
@@ -73,11 +79,12 @@ void App::showMainMenu(int option = 0) {
         } else {
             val = option;
         }
-        while (val < 1 || val > 5) {
+        while (val < 1 || val > 6) {
             cout << "Invalid input, please try again\n";
             cin >> input;
             if (input == "q")
                 return;
+            ss.clear();
             ss << input;
             ss >> val;
         }
@@ -95,7 +102,10 @@ void App::showMainMenu(int option = 0) {
                 }
                 unordered_map<string, int> res = trie->search(exploded);
                 for (auto& p : res) {
-                    cout << p.first << ": " << fixed << setprecision(3) << double(p.second) / double(exploded.size()) * 100.0 << "% of the phrase found\n ";
+                    cout << p.first << ": " << fixed << setprecision(3) << double(p.second) / double(exploded.size()) * 100.0 << "% of the phrase found\n";
+                }
+                if (res.size() == 0) {
+                    cout << "No document matches this phrase" << endl;
                 }
                 break;
             }
@@ -126,6 +136,15 @@ void App::showMainMenu(int option = 0) {
                 break;
             }
             case 5: {
+                unordered_map<string, int> m = trie->info();
+                cout << "Nodes total (real size): " << m["t"] << endl;
+                cout << "Height: " << m["h"] << endl;
+                cout << "Characters stored: " << m["c"] << endl;
+                double ratio =  (double)m["c"]/(double)m["t"];
+                cout << "Compression ratio: " << fixed << setprecision(3) << ratio << endl;
+                break;
+            }
+            case 6: {
                 return;
             }
             default:
@@ -158,7 +177,8 @@ void App::LS() {
     cout << "Files in your current directory (" << fs::current_path() << ")\n\n";
     for (size_t i = 0; i < entries.size(); ++i) {
         cout << left << setfill(' ') << setw(left_offset) << i + 1;
-        cout << left << setfill('-') << setw(filetype_offset + 3) << entries[i].name << (entries[i].type == 1 ? " (directory)" : "") << (indexed.find(entries[i].name) != indexed.end() ? " (indexed)\n" : "\n");
+        cout << left << setfill('-') << setw(filetype_offset + 3) << entries[i].name << (entries[i].type == 1 ? " (directory)" : "");
+        cout << (indexed.find(entries[i].name) != indexed.end() ? " (indexed)\n" : "\n");
     }
 }
 void App::start() {
